@@ -28,10 +28,10 @@ public class Sword : MonoBehaviour
     void AngleCalc()
     {
         //subtract the vector of the previous position with the vector of the gameobject
-        Vector3 direction = previousTran + this.transform.position;
+        Vector3 direction = previousTran - this.transform.position;
         //calculate the angle by processing the vector through pi
-        angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        Debug.Log("angle: " + angle);
+        angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        //update values
         previousTran = transform.position;
     }
 }
