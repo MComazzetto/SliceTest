@@ -7,10 +7,13 @@ public class CubeMovement : MonoBehaviour
     [SerializeField] float movementSpeed;
 
     float cubeRotation;
+    Renderer cube;
+    bool sliced = false;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        cubeRotation = this.gameObject.transform.rotation.z;
+        cubeRotation = this.gameObject.transform.rotation.eulerAngles.z;
+        cube = this.gameObject.GetComponent<MeshRenderer>();
     }
 
     // Update is called once per frame
@@ -19,27 +22,38 @@ public class CubeMovement : MonoBehaviour
         transform.Translate(Vector3.back * movementSpeed);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        //detect if hit by player sword
-        if (collision.gameObject.CompareTag("Sword"))
+        if (!sliced)
         {
-            float subRotation = cubeRotation - 30f;
-            float addRotation = cubeRotation + 30f;
-            float angle = collision.gameObject.GetComponent<Sword>().angle;
-            //detect if the direction of the sword is within 30deg of the target angle, if so give feedback through light, sound and UI
-            if (subRotation < angle && addRotation > angle )
+            //detect if hit by player sword
+            if (other.gameObject.CompareTag("Sword"))
             {
-                //HIT/FEEDBACK
-            }
-            else
-            {
-                //FAIL, MISS
-            }
-            //Give feedback
 
-            Destroy(this.gameObject);
+                float subRotation = cubeRotation - 30f;
+                float addRotation = cubeRotation + 30f;
+                float angle = other.gameObject.GetComponent<Sword>().angle;
+                Debug.Log("Sword direction: " + angle + " Cube rotation" + cubeRotation);
+                //Detect if the direction of the swing is within 30deg of the target angle. The results will change the audio and visual feedback
+                if (subRotation < angle && addRotation > angle)
+                {
+                    //HIT/FEEDBACK
+                    Debug.Log("Hit");
+                    Destroy(this.gameObject);
+                }
+                else
+                {
+                    //FAIL, MISS
+                    Debug.Log("Miss");
+                    cube.material.color = Color.red;
+
+                }
+                sliced = true;
+            }
         }
+        Debug.Log("Connect");
+
 
     }
+
 }

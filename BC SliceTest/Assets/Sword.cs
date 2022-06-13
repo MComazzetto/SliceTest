@@ -29,8 +29,22 @@ public class Sword : MonoBehaviour
     {
         //subtract the vector of the previous position with the vector of the gameobject
         Vector3 direction = previousTran - this.transform.position;
-        //calculate the angle by processing the vector through pi
+        //calculate the angle by processing the vector to recieve the direction of the swords movement
         angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+
+        if (-150f > angle && -180f < angle) // On swipe up, if 
+        {
+            angle = 180f;
+        }
+        else if((-30f < angle && angle < 0) || (330f < angle && 360f > angle))
+        {
+            angle = 0f;
+        }   
+        else if (angle < 0)
+        {
+            angle += 360f;
+        }
+
         //update values
         previousTran = transform.position;
     }
