@@ -25,6 +25,8 @@ public class CubeMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        float angle = 0f;
+
         //Detect if cube has already been slashed
         if (!sliced)
         {
@@ -34,7 +36,15 @@ public class CubeMovement : MonoBehaviour
 
                 float subRotation = cubeRotation - 30f;
                 float addRotation = cubeRotation + 30f;
-                float angle = other.gameObject.GetComponent<Sword>().angle;
+                
+                if(other.gameObject.GetComponent<Sword>() != null)
+                {
+                    angle = other.gameObject.GetComponent<Sword>().angle;
+                }else if(other.gameObject.GetComponent<SmokeSword>() != null)
+                {
+                    angle = other.gameObject.GetComponent<SmokeSword>().angle;
+                }
+                
                 Debug.Log("Sword direction: " + angle + " Cube rotation" + cubeRotation);
 
                 //Detect if the direction of the swing is within 30deg of the target angle. The results will change the audio and visual feedback
@@ -42,20 +52,26 @@ public class CubeMovement : MonoBehaviour
                 {
                     //HIT/FEEDBACK
                     Debug.Log("Hit");
-                    Destroy(this.gameObject);
+                    StartCoroutine(WaitToDespawn(Color.green));
                 }
                 else
                 {
                     //FAIL/ FEEDBACK
                     Debug.Log("Miss");
-                    cube.material.color = Color.red;
+
+                    StartCoroutine(WaitToDespawn(Color.red));
                 }
                 sliced = true;
             }
         }
         Debug.Log("Connect");
 
-
+        IEnumerator WaitToDespawn(Color col)
+        {
+            cube.material.color = col;
+            yield return new WaitForSeconds(0.3f);
+            Destroy(this.gameObject);
+        }
     }
 
 }

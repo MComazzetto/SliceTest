@@ -60,6 +60,7 @@
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Sword.cs" />
     <Compile Include="Assets\Scripts\BoxSpawner.cs" />
+    <Compile Include="Assets\Scripts\SmokeSword.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

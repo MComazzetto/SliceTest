@@ -12,14 +12,15 @@ public class Sword : MonoBehaviour
     {
         //Assign values and start monitoring sword movement
         previousTran = this.transform.position;
-        InvokeRepeating("AngleCalc", 1f, 0.1f);
     }
 
-    void Update()
+    private void FixedUpdate()
     {
         //Follow mouse
         Vector3 pos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane + offset));
         this.transform.position = pos;
+
+        AngleCalc();
     }
 
     //Record the angle of movement every 10ms
